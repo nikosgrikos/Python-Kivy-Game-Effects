@@ -1,4 +1,4 @@
-# Monkey Buster Tutorial Part 3 (See video on YouTube)
+# Monkey Buster 2048 Tutorial Part 3 (See video on YouTube)
 # Banana tokens going into token bank
 # This code animates banana tokens moving towards the token bank
 # You will need to create a "Fonts" folder and place "debussy.ttf" in there. Try www.cooltext.com
