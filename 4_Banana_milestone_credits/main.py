@@ -22,13 +22,16 @@ MACOS = False
 MOBILE64 = True
 
 # Size of screen to open
+# Device 1: 720x1280 (Old Android)
+# Device 2: 1440x2960 (Galaxy)
+# Device 3: 768x1024 (Tablet)
 if not(MOBILE):
     if MACOS:
-        WINDOW_SIZE_X = 72*12 # Try also is 1440/2
-        WINDOW_SIZE_Y = 128*12 # Try also 2960/2
+        WINDOW_SIZE_X = 720*120/100  # Device 1: 120% of 720,  Device 2: 50% of 1440, Device 3: 150% of 768
+        WINDOW_SIZE_Y = 1280*120/100 # Device 1: 120% of 1280, Device 2: 50% of 2960, Device 3: 150% of 1024
     else:
-        WINDOW_SIZE_X = 72*6 # Try also 1440/4
-        WINDOW_SIZE_Y = 128*6 # Try also 2960/4
+        WINDOW_SIZE_X = 720*60/100  # Device 1: 60% of 720,  Device 2: 25% of 1440, Device 3: 75% of 768
+        WINDOW_SIZE_Y = 1280*60/100 # Device 1: 60% of 1280, Device 2: 25% of 2960, Device 3: 75% of 1024
 
     # Position of window for windows based platform
     if MACOS:
@@ -109,7 +112,7 @@ class Game(Widget):
     def back_click(self, window, key, *largs):
         if key == 27:
             #self.unschedule_all_triggers()
-            #self.Game_menu()
+            #self.current_screen = C_MENU
             return True
 
         return
