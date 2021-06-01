@@ -1,4 +1,4 @@
-# Monkey Buster Tutorial Part 1 (See video on YouTube)
+# Monkey Buster 2048 Tutorial Part 1 (See video on YouTube)
 # Screen layout configuration for various devices and "Tap to Play" effect
 # This code creates a section for score, game play and buttons
 # You will need to create a "Fonts" folder and place "debussy.ttf" in there. Try www.cooltext.com
