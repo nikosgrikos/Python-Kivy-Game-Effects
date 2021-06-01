@@ -110,8 +110,8 @@ class Game(Widget):
 
     def back_click(self, window, key, *largs):
         if key == 27:
-            self.unschedule_all_triggers()
-            self.Game_menu()
+            #self.unschedule_all_triggers()
+            #self.current_screen = C_MENU
             return True
 
         return
