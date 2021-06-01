@@ -1,4 +1,4 @@
-# Monkey Buster Tutorial Part 2 (See video on YouTube)
+# Monkey Buster 2048 Tutorial Part 2 (See video on YouTube)
 # Confetti flowing effect
 # This code creates animates confetti flowing down the screen and fading into the background
 from kivy.app import App
