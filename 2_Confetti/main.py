@@ -124,7 +124,7 @@ class Game(Widget):
 
         # Determine the maximum size a block can be based on dimensions of window and matrix parameters
         x1, y1, x2, y2 = WINDOW_RECT
-        split_y = int(((((y2-y1-RECT_OFFSET*4)/9) * self.MATRIX_HEIGHT) - BORDERWIDTH_MATRIX*2)/self.MATRIX_HEIGHT)
+        split_y = int(((((y2-y1-RECT_OFFSET*4)/(self.MATRIX_HEIGHT+2)) * self.MATRIX_HEIGHT) - BORDERWIDTH_MATRIX*2)/self.MATRIX_HEIGHT)
         split_x = int((x2-x1-BORDERWIDTH_MATRIX*2-offset_x*2)/self.MATRIX_WIDTH)
         split = min(split_x, split_y)
         self.BLOCKSIZE = split
