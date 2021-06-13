@@ -3,6 +3,7 @@
 # Buildozer spec as at 1st June 2021 for Monkey Buster 2048 Tutorials
 # The requirements list contains modules for the complete set of tutorials
 # You will need an icon in your Resources folder "Resources/icon_512.png"
+# You may need to install additional modules used in requirements section using pip
 
 # (str) Title of your application
 title = MB 2048 T1
@@ -41,8 +42,6 @@ version = 0.1
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
 requirements = python3, android,  kivy==master, kivmob, plyer, requests, urllib3, chardet, idna, pyjnius
-# openssl, urllib3, chardet, idna, kivy==2.0.0rc2,kivymd=0.104.1
-# pyjnius after kivmob
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
