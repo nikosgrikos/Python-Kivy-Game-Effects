@@ -374,10 +374,11 @@ class Game(Widget):
             self.blocks_oscillation_increments[x] = e, f, g, h
 
             vertices = [x_pos + d, y_pos + c, 0, 0,
-                        x_pos + x_size, y_pos + c, 0, 0,
+                        x_pos + x_size + d, y_pos + c, 0, 0,
                         x_pos + x_size + b, y_pos + y_size + a, 0, 0,
                         x_pos + b, y_pos + y_size + a, 0, 0,
                         x_pos + d, y_pos + c, 0, 0]
+
             indices = [0, 1, 2, 3, 0]
 
             with self.canvas:
