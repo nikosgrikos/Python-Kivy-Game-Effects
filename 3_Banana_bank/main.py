@@ -1,9 +1,9 @@
 # Monkey Buster 2048 Tutorial Part 3 (See video on YouTube)
-# Banana tokens going into token bank
-# This code animates banana tokens moving towards the token bank
+# Fruit tokens going into token bank
+# This code animates fruit tokens moving towards the token bank
 # You will need to create a "Fonts" folder and place "debussy.ttf" in there. Try www.cooltext.com
 # You will need to create a "Resources" folder and place 5 x .png images in there for your buttons
-# and another 5 x .png images in there for banana tokens. Try "free clip art" in Google, but check licence.
+# and another 5 x .png images in there for fruit tokens. Try "free clip art" in Google, but check licence.
 # You will also need a "beam.png" image to display behind the tokens for shining effect
 
 from kivy.app import App
@@ -17,7 +17,7 @@ import random
 # Set this to True if deploying on mobile phone
 MOBILE = False
 # Set this to True if deploying on MacOS
-MACOS = False
+MACOS = True
 # Set this to True if this is the deployed on a new phone!
 MOBILE64 = True
 
@@ -83,12 +83,10 @@ PURPLE = (125/255,62/255,157/255)
 # Game state constants
 C_PLAYING_GAME = 2
 
-# Banana instructions
+# Fruit instructions
 C_MOVE_TO_MIDDLE = 1
-C_MOVE_TO_BOTTOM_CORNER = 2
-C_MOVE_TO_TOP_CORNER = 3
-C_REMOVE_BANANA = 4
-C_MOVE_TO_MIDDLE_THEN_TOP_CORNER = 5
+C_MOVE_TO_FRUIT_BANK = 2
+C_REMOVE_FRUIT = 4
 
 #_______________________________________________________________________________________________________________________
 
@@ -179,15 +177,15 @@ class Game(Widget):
     def initialise_triggers(self):
 
         # Triggers used in the game
-        self.trigger1 = Clock.create_trigger(self.animate_bananas_run, 0.01)
+        self.trigger1 = Clock.create_trigger(self.animate_fruits_run, 0.01)
 
         return
     # ___________________________________________________________________________________________________________________
 
     def initialise_special_effects(self):
 
-        self.banana_position = []
-        self.banana_bank = 0
+        self.fruit_position = []
+        self.fruit_bank = 0
 
         return
     # __________________________________________________________________________________________________________________
@@ -273,7 +271,7 @@ class Game(Widget):
         x1, y1, x2, y2 = self.BUTTON_4_RECT
         with self.canvas:
             Color(rgb=WHITE)
-            Rectangle(source='Resources/button_3.png', pos=(x1, y1), size=(x2 - x1, y2 - y1))
+            Rectangle(source='Resources/button_4.png', pos=(x1, y1), size=(x2 - x1, y2 - y1))
 
         x1, y1, x2, y2 = self.BUTTON_5_RECT
         with self.canvas:
@@ -289,7 +287,7 @@ class Game(Widget):
         x1, y1, x2, y2 = self.BUTTON_3_RECT
         yy2 = y1 + int(self.BLOCKSIZE/5)
         fontsize = self.BLOCKSIZE/5
-        text = str(self.banana_bank)
+        text = str(self.fruit_bank)
 
         with self.canvas:
             Color(rgb=WHITE)
@@ -328,54 +326,51 @@ class Game(Widget):
 
     #___________________________________________________________________________________________________________________
 
-    def animate_bananas(self):
+    def animate_fruits(self):
 
         x = random.randrange(0, self.MATRIX_WIDTH)
         y = random.randrange(0, self.MATRIX_HEIGHT)
         z = random.choice([1, 2, 3, 4, 5])
-        self.animate_bananas_initialise(y, x, z)
+        self.animate_fruits_initialise(y, x, z)
 
         return
     #___________________________________________________________________________________________________________________
 
-    def animate_bananas_initialise(self, y, x, number_of_bananas):
+    def animate_fruits_initialise(self, y, x, number_of_fruits):
 
         x1, y1, x2, y2 = self.MATRIX_RECT
         x1 += self.BLOCKSIZE*x + int(self.BLOCKSIZE*(2/3))
         y1 += self.BLOCKSIZE*(self.MATRIX_HEIGHT-1-y) + int(self.BLOCKSIZE*(2/3))
         size = int(self.BLOCKSIZE/3)
-        delay_steps = 0
-        self.banana_position.extend([y1, x1, size, C_MOVE_TO_MIDDLE, number_of_bananas, delay_steps])
+        self.fruit_position.extend([y1, x1, size, C_MOVE_TO_MIDDLE, number_of_fruits])
 
         if not(self.trigger1.is_triggered):
-            self.trigger1 = Clock.schedule_interval(self.animate_bananas_run, 0.01)
+            self.trigger1 = Clock.schedule_interval(self.animate_fruits_run, 0.01)
 
         return
 
     #___________________________________________________________________________________________________________________
 
-    def animate_bananas_run(self, update=False):
+    def animate_fruits_run(self, dt):
 
         self.draw_canvas()
 
         x1, y1, x2, y2 = self.MATRIX_RECT
-        max_banana_size = self.BLOCKSIZE*2
-        min_banana_size = int(self.BLOCKSIZE/10)
+        max_fruit_size = self.BLOCKSIZE*2
+        min_fruit_size = int(self.BLOCKSIZE/10)
 
         middle_x1 = x1 + int((x2-x1)/2)
         middle_y1 = y1 + int((y2-y1)/2)
 
         remove = False
-        no_more_this_cycle = False
-        points = int(len(self.banana_position)/6)
+        points = int(len(self.fruit_position)/5)
         for i in range(points):
-            index = i*6
-            y = self.banana_position[index]
-            x = self.banana_position[index+1]
-            banana_size = self.banana_position[index+2]
-            instruction = self.banana_position[index+3]
-            image = self.banana_position[index+4]
-            delay_steps = self.banana_position[index+5]
+            index = i*5
+            y = self.fruit_position[index]
+            x = self.fruit_position[index+1]
+            fruit_size = self.fruit_position[index+2]
+            instruction = self.fruit_position[index+3]
+            image = self.fruit_position[index+4]
 
             x1 = x
             y1 = y
@@ -389,124 +384,92 @@ class Game(Widget):
                 increment_y = int(self.BLOCKSIZE / 3)
                 increment_z = int(self.BLOCKSIZE / 5)
 
-            if instruction in (C_MOVE_TO_MIDDLE_THEN_TOP_CORNER, C_MOVE_TO_TOP_CORNER):
-                increment_x *= 2
-                increment_y *= 2
-
             # Beam coordinates
-            xx1 = x1 - int(banana_size / 2)
-            yy1 = y1 - int(banana_size / 2)
-            xx2 = xx1 + 2 * banana_size
-            yy2 = yy1 + 2 * banana_size
+            xx1 = x1 - int(fruit_size / 2)
+            yy1 = y1 - int(fruit_size / 2)
+            xx2 = xx1 + 2 * fruit_size
+            yy2 = yy1 + 2 * fruit_size
 
             if image == 1:
-                sourcefile = 'Resources/banana.png'
+                sourcefile = 'Resources/fruit_1.png'
             elif image == 2:
-                sourcefile = 'Resources/banana_2.png'
+                sourcefile = 'Resources/fruit_2.png'
             elif image == 3:
-                sourcefile = 'Resources/banana_3.png'
+                sourcefile = 'Resources/fruit_3.png'
             elif image == 4:
-                sourcefile = 'Resources/banana_4.png'
+                sourcefile = 'Resources/fruit_4.png'
             elif image >= 5:
-                sourcefile = 'Resources/banana_5.png'
+                sourcefile = 'Resources/fruit_5.png'
 
-            if instruction != C_REMOVE_BANANA:
+            if instruction != C_REMOVE_FRUIT:
                 with self.canvas:
                     Color(rgb=WHITE)
                     Rectangle(source='Resources/beam.png', pos=(xx1, yy1), size=(xx2 - xx1, yy2 - yy1))
 
                 with self.canvas:
                     Color(rgb=WHITE)
-                    Rectangle(source=sourcefile, pos=(x1, y1), size=(banana_size, banana_size))
+                    Rectangle(source=sourcefile, pos=(x1, y1), size=(fruit_size, fruit_size))
 
-            if update and not(no_more_this_cycle):
+            if instruction == C_MOVE_TO_MIDDLE:
 
-                if delay_steps > 0:
-                    delay_steps -= 1
-
-                elif instruction in (C_MOVE_TO_MIDDLE, C_MOVE_TO_MIDDLE_THEN_TOP_CORNER):
-
+                if instruction == C_MOVE_TO_MIDDLE:
+                    m_x1 = middle_x1 - int(max_fruit_size/2)
+                    m_y1 = middle_y1 - int(max_fruit_size/2)
+                if x < m_x1 - increment_x:
+                    x += increment_x
+                if y < m_y1 - increment_y:
+                    y += increment_y
+                if x > m_x1 + increment_x:
+                    x -= increment_x
+                if y > m_y1 + increment_y:
+                    y -= increment_y
+                if fruit_size < max_fruit_size:
+                    fruit_size += increment_z
+                # No change
+                if x1 == x and y1 == y \
+                        and (fruit_size >= max_fruit_size):
                     if instruction == C_MOVE_TO_MIDDLE:
-                        m_x1 = middle_x1 - int(max_banana_size/2)
-                        m_y1 = middle_y1 - int(max_banana_size/2)
-                    else:
-                        m_x1 = middle_x1
-                        m_y1 = middle_y1
-                    if x < m_x1 - increment_x:
-                        x += increment_x
-                    if y < m_y1 - increment_y:
-                        y += increment_y
-                    if x > m_x1 + increment_x:
-                        x -= increment_x
-                    if y > m_y1 + increment_y:
-                        y -= increment_y
-                    if instruction == C_MOVE_TO_MIDDLE:
-                        if banana_size < max_banana_size:
-                            banana_size += increment_z
-                    # No change
-                    if x1 == x and y1 == y \
-                            and (banana_size >= max_banana_size or instruction == C_MOVE_TO_MIDDLE_THEN_TOP_CORNER):
-                        if instruction == C_MOVE_TO_MIDDLE:
-                            instruction = C_MOVE_TO_BOTTOM_CORNER
-                        else:
-                            instruction = C_MOVE_TO_TOP_CORNER
+                        instruction = C_MOVE_TO_FRUIT_BANK
 
-                elif instruction == C_MOVE_TO_BOTTOM_CORNER:
+            elif instruction == C_MOVE_TO_FRUIT_BANK:
 
-                    xx1, yy1, xx2, yy2 = self.BANK_RECT
-                    corner_x1 = xx1 + int((xx2-xx1)/2)
-                    corner_y1 = yy1 + int((yy2-yy1)/2)
+                xx1, yy1, xx2, yy2 = self.BANK_RECT
+                corner_x1 = xx1 + int((xx2-xx1)/2)
+                corner_y1 = yy1 + int((yy2-yy1)/2)
 
-                    if x > corner_x1 + increment_x:
-                        x -= increment_x
-                    if x < corner_x1 - increment_x:
-                        x += increment_x
-                    if y > corner_y1 + increment_y:
-                        y -= increment_y
-                    if banana_size > min_banana_size:
-                        banana_size -= increment_z
-                    if x1 == x and y1 == y and banana_size <= min_banana_size:
-                        instruction = C_REMOVE_BANANA
-                        self.banana_bank += image
-                        remove = True
+                if x > corner_x1 + increment_x:
+                    x -= increment_x
+                if x < corner_x1 - increment_x:
+                    x += increment_x
+                if y > corner_y1 + increment_y:
+                    y -= increment_y
+                if fruit_size > min_fruit_size:
+                    fruit_size -= increment_z
+                if x1 == x and y1 == y and fruit_size <= min_fruit_size:
+                    instruction = C_REMOVE_FRUIT
+                    self.fruit_bank += image
+                    remove = True
 
-                elif instruction == C_MOVE_TO_TOP_CORNER:
-
-                    xx1, yy1, xx2, yy2 = self.BANANA_TOKENS_RECT
-                    corner_x1 = xx1
-                    corner_y1 = yy1
-
-                    if x <= corner_x1 - increment_x:
-                        x += increment_x
-                    if y <= corner_y1 - increment_y:
-                        y += increment_y
-                    if x1 == x and y1 == y:
-                        instruction = C_REMOVE_BANANA
-                        self.banana_tokens += image
-                        remove = True
-
-                self.banana_position[index] = y
-                self.banana_position[index+1] = x
-                self.banana_position[index+2] = banana_size
-                self.banana_position[index+3] = instruction
-                self.banana_position[index+4] = image
-                self.banana_position[index+5] = delay_steps
+            self.fruit_position[index] = y
+            self.fruit_position[index+1] = x
+            self.fruit_position[index+2] = fruit_size
+            self.fruit_position[index+3] = instruction
+            self.fruit_position[index+4] = image
 
         # Remove items that have scrolled to the max
         if remove:
             new_list = []
-            points = int(len(self.banana_position) / 6)
+            points = int(len(self.fruit_position) / 5)
             for k in range(points):
-                index = k*6
-                instruction = self.banana_position[index+3]
-                if instruction != C_REMOVE_BANANA:
-                    y = self.banana_position[index]
-                    x = self.banana_position[index + 1]
-                    banana_size = self.banana_position[index + 2]
-                    image = self.banana_position[index + 4]
-                    delay_steps = self.banana_position[index + 5]
-                    new_list.extend([y, x, banana_size, instruction, image, delay_steps])
-            self.banana_position = new_list
+                index = k*5
+                instruction = self.fruit_position[index+3]
+                if instruction != C_REMOVE_FRUIT:
+                    y = self.fruit_position[index]
+                    x = self.fruit_position[index + 1]
+                    fruit_size = self.fruit_position[index + 2]
+                    image = self.fruit_position[index + 4]
+                    new_list.extend([y, x, fruit_size, instruction, image])
+            self.fruit_position = new_list
 
             if new_list == []:
                 Clock.unschedule(self.trigger1)
@@ -537,7 +500,7 @@ class Game(Widget):
         if self.current_screen == C_PLAYING_GAME:
 
             if self.mouse_in_rect(x, y, self.BUTTON_1_RECT):
-                self.animate_bananas()
+                self.animate_fruits()
             if self.mouse_in_rect(x, y, self.BUTTON_5_RECT):
                 exit()
 
