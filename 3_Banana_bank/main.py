@@ -412,9 +412,8 @@ class Game(Widget):
 
             if instruction == C_MOVE_TO_MIDDLE:
 
-                if instruction == C_MOVE_TO_MIDDLE:
-                    m_x1 = middle_x1 - int(max_fruit_size/2)
-                    m_y1 = middle_y1 - int(max_fruit_size/2)
+                m_x1 = middle_x1 - int(max_fruit_size/2)
+                m_y1 = middle_y1 - int(max_fruit_size/2)
                 if x < m_x1 - increment_x:
                     x += increment_x
                 if y < m_y1 - increment_y:
