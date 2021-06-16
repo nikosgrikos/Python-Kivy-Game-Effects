@@ -184,7 +184,7 @@ class Game(Widget):
     def initialise_triggers(self):
 
         # Triggers used in the game
-        self.trigger1 = Clock.create_trigger(self.animate_fruits_run, 0.01)
+        self.trigger1 = Clock.create_trigger(self.animate_fruits_run, 0.03)
         self.trigger2 = Clock.create_trigger(self.process_milestone_bonus_run, 0.03)
         self.trigger3 = Clock.create_trigger(self.process_milestone_bonus_move, 0.03)
 
@@ -401,7 +401,6 @@ class Game(Widget):
         middle_y1 = y1 + int((y2-y1)/2)
 
         remove = False
-        no_more_this_cycle = False
         points = int(len(self.fruit_position)/6)
         for i in range(points):
             index = i*6
@@ -566,9 +565,9 @@ class Game(Widget):
 
     def process_milestone_bonus_run(self, dt):
 
-        division, modular = divmod(self.milestone_number_of_fruits_left, 3)
+        division, modular = divmod(self.milestone_number_of_fruits_left, 1) # in MB, this was , 3)
         if division > 0:
-            number_of_fruits = 3
+            number_of_fruits = 1 # In MB, this was = 3
         else:
             number_of_fruits = modular
 
@@ -602,7 +601,6 @@ class Game(Widget):
 
     def process_milestone_bonus_move(self, dt):
 
-        self.draw_canvas()
         self.animate_fruits_run(dt=0)
         points = int(len(self.fruit_position)/6)
         if points == 0:
