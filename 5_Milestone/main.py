@@ -4,7 +4,6 @@
 # You will need to create a "Fonts" folder and place "debussy.ttf" in there. Try www.cooltext.com
 # You will need to create a "Resources" folder and place 5 x .png images in there for your buttons
 # You will need to create a "Beam" folder and place 8 x .png images in there for your rotated sun beam frames
-# You will also need a "Resources/beam.png" image to display behind the tokens for shining effect
 # You will also need a "Resources/sparkle.png" image to display sparkles
 # You will also need a "Resources/Board_24.png" for your main achievement image (rename accordingly)
 
@@ -19,7 +18,7 @@ import random
 # Set this to True if deploying on mobile phone
 MOBILE = False
 # Set this to True if deploying on MacOS
-MACOS = False
+MACOS = True
 # Set this to True if this is the deployed on a new phone!
 MOBILE64 = True
 
@@ -284,7 +283,7 @@ class Game(Widget):
         x1, y1, x2, y2 = self.BUTTON_4_RECT
         with self.canvas:
             Color(rgb=WHITE)
-            Rectangle(source='Resources/button_3.png', pos=(x1, y1), size=(x2 - x1, y2 - y1))
+            Rectangle(source='Resources/button_4.png', pos=(x1, y1), size=(x2 - x1, y2 - y1))
 
         x1, y1, x2, y2 = self.BUTTON_5_RECT
         with self.canvas:
@@ -320,8 +319,6 @@ class Game(Widget):
 
     def milestone_run(self, dt):
 
-        self.canvas.clear()
-        self.canvas.after.clear()
         self.draw_canvas()
 
         self.display_rect(self.MILESTONE_RECT)
